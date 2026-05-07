@@ -1,17 +1,17 @@
 # GitHub update plan
 
-这个项目不适合一次性把所有代码、结果图和表格都推上去。比较自然的方式是按复现过程逐步整理，每一次更新只解决一个明确问题。
+这个项目中我会按照文章的逻辑顺序，整理数据/代码/结果图/笔记与注意事项，每一次更新中逐步推进。
 
-## Suggested commits
+## planned commits
 
 1. `init reproduction notes and project structure`
    - README 初稿
-   - 数据说明
-   - 复现笔记
+   - 数据展示方式与说明
+   - 项目构建计划
    - 基础目录
 
 2. `add TCGA expression data preprocessing`
-   - 整理 counts 和 TPM
+   - 计算并整理 counts 和 TPM
    - 区分 01A/11A
    - 保存 log2(TPM + 1)
 
@@ -43,11 +43,11 @@
    - GSEA
    - CIBERSORT 免疫浸润
 
-9. `update reproduced figures and result notes`
-   - 放入重绘图片
+
+`Routine Output Reconciliation`
+   - 放入重绘图片 
    - 对照原始结果
    - 补充 README 结果解释
+   - 补充notes与复现心得
 
-## Style reminder
 
-提交记录保持简单就好，不需要写得像软件工程项目。重点是让别人能看出这个项目是一步步复现、检查和整理出来的。

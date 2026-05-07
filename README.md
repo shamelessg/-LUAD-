@@ -1,58 +1,52 @@
 # TCGA-LUAD immune microenvironment analysis around BTK
 
-这个仓库整理的是一篇 LUAD 免疫微环境文章的复现过程。我的重点不是把它包装成一个复杂的软件项目，而是尽量把每一步分析为什么做、数据怎么接上、结果怎么看写清楚。
+## 从理论学习到生信实践：本科阶段基于 TCGA 的免疫微环境经典 pipeline 复现回顾整理
+*Paper Reference: BTK Has Potential to Be a Prognostic Factor for Lung Adenocarcinoma and an Indicator for Tumor Microenvironment Remodeling: A Study Based on TCGA Data Mining*
 
-项目主线是：基于 TCGA-LUAD 转录组数据，先刻画肿瘤样本的免疫/基质成分，再结合差异分析、生存分析、富集分析和免疫浸润分析，观察 BTK 在 LUAD 免疫微环境中的可能意义。
+此仓库整理本人于大三上学期复现一篇生信文章的过程。
+思路是“这一步为什么要做？输入的数据长什么样？输出的结果怎么看？如果报错了如何排查？”。
+希望以此展示我生信学习的过程与已学到的科学技能与思维。
 
-## Analysis workflow
 
-目前按下面几个板块整理：
+## Pipeline Overview / 分析全流程拆解
 
-1. **TCGA-LUAD 数据整理**  
-   从 GDC 数据中整理 counts 和 TPM，区分肿瘤样本 01A 与正常样本 11A，并得到 log2(TPM + 1) 表达矩阵。
+本项目将全流程拆解为三个标准化模块，重点关注代码的可复用性与数据对齐的严谨性：
 
-2. **ESTIMATE 免疫微环境评分**  
-   使用 ESTIMATE 计算 ImmuneScore、StromalScore、ESTIMATEScore 和 TumorPurity。这里主要用于从整体上估计 LUAD 样本中的免疫和基质成分。
+### 1. 上游预处理：数据清洗与临床对齐
+* **矩阵清洗**：处理原始数据，得到 GDC 原生 Counts/TPM，严格区分 `01A` (肿瘤) 与 `11A` (正常)，执行 `log2(TPM+1)` 转化。
+* **临床对齐**：合并表达矩阵与 OS/临床分期数据，脚本内置 TCGA Barcode 校验，防止错位匹配。
 
-3. **生存和临床信息合并**  
-   合并 OS、生存时间、临床分期和表达矩阵。这个步骤最容易因为 TCGA barcode 处理不一致出错，所以脚本中会保留样本 ID 检查。
+### 2. 中游核心分析：微环境打分与靶标锁定
+* **宏观评分**：调用 `ESTIMATE` 计算 ImmuneScore、StromalScore 及 TumorPurity。
+* **差异挖掘**：按评分中位数划定高低组，基于 `DESeq2` 独立执行双重差异分析，提取交集基因。
+* **靶标锁定**：结合 GO/KEGG 富集、PPI 网络推断与单因素 COX 风险回归，最终筛出预后相关核心靶标 `BTK`。
 
-4. **免疫/基质评分相关差异基因**  
-   按 ImmuneScore 和 StromalScore 的中位数分组，用 DESeq2 做差异分析，再整理两类差异基因的交集。
+### 3. 下游微环境验证：机制挖掘与交叉验证
+* **临床验证**：多维度核查 `BTK` 表达特征（肿瘤 vs 正常、严格配对、不同分期）及其 K-M 生存预后指示效能。
+* **免疫反卷积**：进行 `CIBERSORT` 量化 22 种免疫细胞占比，对比并刻画 `BTK` 高低组间的免疫微环境差异。
 
-5. **功能富集、PPI 和预后分析**  
-   对交集基因做 GO/KEGG 富集、PPI 网络和单因素 COX 分析，尝试找到和预后相关的候选基因。
-
-6. **BTK 相关分析**  
-   重点观察 BTK 在肿瘤和正常组织中的表达差异、配对样本表达、临床分期、生存差异，以及 BTK 高低表达相关通路。
-
-7. **CIBERSORT 免疫浸润分析**  
-   估计不同免疫细胞比例，并比较 BTK 高低表达组之间的免疫细胞组成差异。
 
 ## Repository layout
 
 ```text
 scripts/              # 按复现步骤拆开的 R 脚本
 data_description/     # 数据来源和大文件说明
-data/external/        # 本地放原始数据，不提交到 GitHub
-data/processed/       # 本地放中间矩阵，不提交到 GitHub
+data/                 # 按照脚本流程整理的全部文件
 results/tables/       # 可以提交的小型结果表
 results/figures/      # 原始结果图和重绘结果图
-notes/                # 复现过程中的笔记
+notes/troubleshoot - scientific thoughts  # 复现过程中的笔记与思考
+notes/github_update_plan  #分布整理并上传github的计划          
 ```
 
-## Current status
 
-这个仓库还在整理中。现在先放入数据准备、ESTIMATE 和生存/临床整合部分，后续会继续补上 DEG、富集、BTK 和 CIBERSORT 分析。
 
 ## Data note
 
-TCGA 表达矩阵文件比较大，不适合直接放在 GitHub。完整数据来源和需要准备的文件见：
+TCGA 表达矩阵文件比较大，不适合直接上传GitHub。完整数据来源和需要准备的文件见：
 
 - `data_description/data_source.md`
 - `data_description/large_files_note.md`
 
-本地运行时，把原始数据放到 `data/external/`，脚本生成的大型中间矩阵会写入 `data/processed/`。
 
 ## How to run
 
@@ -64,4 +58,4 @@ source("scripts/02_ESTIMATE_score.R")
 source("scripts/03_survival_and_clinical.R")
 ```
 
-后续脚本会按分析顺序继续补充。
+
