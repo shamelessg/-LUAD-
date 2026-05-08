@@ -1,15 +1,19 @@
 # 01_prepare_TCGA_data.R
 # 整理 TCGA-LUAD 表达矩阵：counts、TPM、01A/11A 和 log2(TPM + 1)。
-# 这个脚本默认从 data/external/ 读取原始 rda，并把较大的中间文件写到 data/processed/。
+# 从 data/external/01_tcga_expression_clinical/ 读取原始 rda，
+# 输出矩阵写入 data/processed/00_counts_tpms/。
 
 suppressPackageStartupMessages({
   library(tidyverse)
 })
 
 project_dir <- getwd()
-external_dir <- file.path(project_dir, "data", "external")
-processed_dir <- file.path(project_dir, "data", "processed")
-dir.create(processed_dir, showWarnings = FALSE, recursive = TRUE)
+external_dir <- file.path(project_dir, "data", "external", "01_tcga_expression_clinical")
+processed_dir    <- file.path(project_dir, "data", "processed")
+counts_tpms_dir  <- file.path(processed_dir, "00_counts_tpms")
+table_dir        <- file.path(project_dir, "results", "tables")
+dir.create(counts_tpms_dir, showWarnings = FALSE, recursive = TRUE)
+dir.create(table_dir,       showWarnings = FALSE, recursive = TRUE)
 
 gdc_file <- file.path(external_dir, "luad.gdc_2022.rda")
 annotation_file <- file.path(external_dir, "gene_annotation_2022.rda")
@@ -64,19 +68,19 @@ tpms_log2 <- log2(tpms + 1)
 tpms01A_log2 <- log2(tpms01A + 1)
 tpms11A_log2 <- log2(tpms11A + 1)
 
-write.table(counts01A, file.path(processed_dir, "counts01A.txt"),
+write.table(counts01A,   file.path(counts_tpms_dir, "counts01A.txt"),
             sep = "\t", row.names = TRUE, col.names = NA, quote = FALSE)
-write.table(counts11A, file.path(processed_dir, "counts11A.txt"),
+write.table(counts11A,   file.path(counts_tpms_dir, "counts11A.txt"),
             sep = "\t", row.names = TRUE, col.names = NA, quote = FALSE)
-write.table(tpms01A, file.path(processed_dir, "tpms01A.txt"),
+write.table(tpms01A,     file.path(counts_tpms_dir, "tpms01A.txt"),
             sep = "\t", row.names = TRUE, col.names = NA, quote = FALSE)
-write.table(tpms11A, file.path(processed_dir, "tpms11A.txt"),
+write.table(tpms11A,     file.path(counts_tpms_dir, "tpms11A.txt"),
             sep = "\t", row.names = TRUE, col.names = NA, quote = FALSE)
-write.table(tpms_log2, file.path(processed_dir, "tpms_log2.txt"),
+write.table(tpms_log2,   file.path(counts_tpms_dir, "tpms_log2.txt"),
             sep = "\t", row.names = TRUE, col.names = NA, quote = FALSE)
-write.table(tpms01A_log2, file.path(processed_dir, "tpms01A_log2.txt"),
+write.table(tpms01A_log2, file.path(counts_tpms_dir, "tpms01A_log2.txt"),
             sep = "\t", row.names = TRUE, col.names = NA, quote = FALSE)
-write.table(tpms11A_log2, file.path(processed_dir, "tpms11A_log2.txt"),
+write.table(tpms11A_log2, file.path(counts_tpms_dir, "tpms11A_log2.txt"),
             sep = "\t", row.names = TRUE, col.names = NA, quote = FALSE)
 
 sample_summary <- tibble(
@@ -85,5 +89,5 @@ sample_summary <- tibble(
   samples = c(ncol(counts01A), ncol(counts11A), ncol(tpms01A), ncol(tpms11A))
 )
 
-write.csv(sample_summary, file.path("results", "tables", "sample_summary.csv"), row.names = FALSE)
+write.csv(sample_summary, file.path(table_dir, "sample_summary.csv"), row.names = FALSE)
 print(sample_summary)

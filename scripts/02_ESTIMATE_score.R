@@ -5,14 +5,15 @@ suppressPackageStartupMessages({
   library(estimate)
 })
 
-project_dir <- getwd()
-processed_dir <- file.path(project_dir, "data", "processed")
-table_dir <- file.path(project_dir, "results", "tables")
+project_dir     <- getwd()
+processed_dir   <- file.path(project_dir, "data", "processed")
+counts_tpms_dir <- file.path(processed_dir, "00_counts_tpms")
+table_dir       <- file.path(project_dir, "results", "tables")
 dir.create(table_dir, showWarnings = FALSE, recursive = TRUE)
 
-exp_file <- file.path(processed_dir, "tpms01A_log2.txt")
-gct_file <- file.path(processed_dir, "tpms01A_log2.gct")
-estimate_raw_file <- file.path(processed_dir, "tpms01A_log2_estimate_score.txt")
+exp_file            <- file.path(counts_tpms_dir, "tpms01A_log2.txt")
+gct_file            <- file.path(counts_tpms_dir, "tpms01A_log2.gct")
+estimate_raw_file   <- file.path(counts_tpms_dir, "tpms01A_log2_estimate_score.txt")
 estimate_result_file <- file.path(table_dir, "ESTIMATE_result.txt")
 
 if (!file.exists(exp_file)) {
@@ -23,7 +24,7 @@ exp <- read.table(exp_file, sep = "\t", row.names = 1, check.names = FALSE,
                   stringsAsFactors = FALSE, header = TRUE)
 
 filterCommonGenes(input.f = exp_file, output.f = gct_file, id = "GeneSymbol")
-estimateScore(gct_file, estimate_raw_file, platform = "affymetrix")
+estimateScore(gct_file, estimate_raw_file, platform = "illumina")
 
 estimate_result <- read.table(estimate_raw_file, sep = "\t", row.names = 1,
                               check.names = FALSE, stringsAsFactors = FALSE,

@@ -1,9 +1,0 @@
-﻿文件名: tpms01A.txt
-文件大小: 65.7 MB
-文件类型: .txt
-相对路径: \TCGAdata\tpms01A.txt
-
-[数据文件说明]
-此文件为原始TCGA数据文件，因文件大小超过10MB，不适合上传至GitHub。
-如需获取完整数据，请访问: https://portal.gdc.cancer.gov/
-或联系项目作者获取原始数据。

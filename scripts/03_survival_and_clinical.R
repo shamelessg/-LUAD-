@@ -5,14 +5,15 @@ suppressPackageStartupMessages({
   library(tidyverse)
 })
 
-project_dir <- getwd()
-external_dir <- file.path(project_dir, "data", "external")
-processed_dir <- file.path(project_dir, "data", "processed")
-table_dir <- file.path(project_dir, "results", "tables")
-dir.create(processed_dir, showWarnings = FALSE, recursive = TRUE)
-dir.create(table_dir, showWarnings = FALSE, recursive = TRUE)
+project_dir     <- getwd()
+external_dir    <- file.path(project_dir, "data", "external", "01_tcga_expression_clinical")
+processed_dir   <- file.path(project_dir, "data", "processed")
+counts_tpms_dir <- file.path(processed_dir, "00_counts_tpms")
+table_dir       <- file.path(project_dir, "results", "tables")
+dir.create(processed_dir,   showWarnings = FALSE, recursive = TRUE)
+dir.create(table_dir,       showWarnings = FALSE, recursive = TRUE)
 
-exp_file <- file.path(processed_dir, "tpms01A_log2.txt")
+exp_file      <- file.path(counts_tpms_dir, "tpms01A_log2.txt")
 os_file <- file.path(external_dir, "OS.txt")
 estimate_file <- file.path(table_dir, "ESTIMATE_result.txt")
 gdc_file <- file.path(external_dir, "luad.gdc_2022.rda")
@@ -48,7 +49,7 @@ surv_01A <- survival[shared_samples, , drop = FALSE]
 stopifnot(identical(rownames(exp_01A), rownames(surv_01A)))
 
 exp_surv_01A <- cbind(surv_01A, exp_01A)
-write.table(exp_surv_01A, file.path(processed_dir, "exp_surv_01A.txt"),
+write.table(exp_surv_01A, file.path(counts_tpms_dir, "exp_surv_01A.txt"),
             sep = "\t", row.names = TRUE, col.names = NA, quote = FALSE)
 
 estimate_result <- read.table(estimate_file, sep = "\t", row.names = 1,
@@ -83,12 +84,13 @@ if (file.exists(gdc_file)) {
   clinical$ajcc_pathologic_t <- gsub("a|b", "", clinical$ajcc_pathologic_t)
   clinical$ajcc_pathologic_m <- gsub("a|b", "", clinical$ajcc_pathologic_m)
 
-  clinical01A <- clinical[colnames(tpms01A_log2), , drop = FALSE]
-  exp01A <- t(tpms01A_log2) %>% as.data.frame()
+  matched_clin <- intersect(colnames(tpms01A_log2), rownames(clinical))
+  clinical01A <- clinical[matched_clin, , drop = FALSE]
+  exp01A <- t(tpms01A_log2[, matched_clin, drop = FALSE]) %>% as.data.frame()
   stopifnot(identical(rownames(clinical01A), rownames(exp01A)))
 
   clinical_expr01A <- cbind(clinical01A, exp01A)
-  write.table(clinical_expr01A, file.path(processed_dir, "clinical.expr01A.txt"),
+  write.table(clinical_expr01A, file.path(counts_tpms_dir, "clinical.expr01A.txt"),
               sep = "\t", row.names = TRUE, col.names = NA, quote = FALSE)
 
   clinical_estimate_samples <- intersect(rownames(clinical01A), rownames(estimate_result))
