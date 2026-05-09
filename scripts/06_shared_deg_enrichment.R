@@ -67,6 +67,8 @@ cat(sprintf("交集下调基因: %d\n", length(common_down)))
 DEG_final <- data.frame(SYMBOL = c(common_up, common_down), stringsAsFactors = FALSE)
 write.table(DEG_final, file.path(out_dir, "DEG_final.txt"),
             sep = "\t", row.names = FALSE, quote = FALSE)
+write.table(DEG_final, file.path(project_dir, "results", "tables", "DEG_final.txt"),
+            sep = "\t", row.names = FALSE, quote = FALSE)
 
 cat(sprintf("DEG_final 共 %d 个基因，已写入 %s\n",
             nrow(DEG_final), file.path(out_dir, "DEG_final.txt")))

@@ -53,9 +53,22 @@ TCGA 表达矩阵文件比较大，不适合直接上传GitHub。完整数据来
 建议在仓库根目录运行脚本：
 
 ```r
+# 上游预处理
 source("scripts/01_prepare_TCGA_data.R")
 source("scripts/02_ESTIMATE_score.R")
 source("scripts/03_survival_and_clinical.R")
+
+# 中游核心分析
+source("scripts/04_immune_score_deg.R")
+source("scripts/05_stromal_score_deg.R")
+source("scripts/06_shared_deg_enrichment.R")
+source("scripts/07_ppi_network.R")
+source("scripts/08_cox_screening.R")
+
+# 下游靶标验证
+source("scripts/09_btk_expression_clinical.R")
+source("scripts/10_btk_deg_gsea.R")
+source("scripts/11_cibersort_infiltration.R")
 ```
 
 
