@@ -1,10 +1,19 @@
 # TCGA-LUAD immune microenvironment analysis around BTK
 
+<p align="center">
+  <img src="results/figures/fig8_comparison.png" width="900" alt="Figure 8 Comparison">
+</p>
+
+> **Figure 8 — CIBERSORT TIC Profile ： 原文 vs. 复现。** 左为 Bi et al. (2020) 原文 Figure 8，右为本仓库独立复现。A：LUAD 肿瘤样本中 21 种免疫浸润细胞的相对组成；B：免疫细胞间 Spearman 相关性热图。
+>
+> *Original Figure 8 from Bi K-W, Wei X-G, Qin X-X, Li B. Front. Oncol. 2020;10:424. doi:10.3389/fonc.2020.00424*
+
+---
+
 ## 从理论学习到生信实践：本科阶段基于 TCGA 的免疫微环境经典 pipeline 复现回顾整理
-*Paper Reference: BTK Has Potential to Be a Prognostic Factor for Lung Adenocarcinoma and an Indicator for Tumor Microenvironment Remodeling: A Study Based on TCGA Data Mining*
 
 此仓库整理本人于大三上学期复现一篇生信文章的过程。
-思路是“这一步为什么要做？输入的数据长什么样？输出的结果怎么看？如果报错了如何排查？”。
+思路是"这一步为什么要做？输入的数据长什么样？输出的结果怎么看？如果报错了如何排查？"。
 希望以此展示我生信学习的过程与已学到的科学技能与思维。
 
 
@@ -34,10 +43,9 @@ data_description/     # 数据来源和大文件说明
 data/                 # 按照脚本流程整理的全部文件
 results/tables/       # 可以提交的小型结果表
 results/figures/      # 原始结果图和重绘结果图
-notes/troubleshoot - scientific thoughts  # 复现过程中的笔记与思考
+notes/                # 复现过程中的笔记与思考
 notes/github_update_plan  #分布整理并上传github的计划          
 ```
-
 
 
 ## Data note
@@ -70,5 +78,3 @@ source("scripts/09_btk_expression_clinical.R")
 source("scripts/10_btk_deg_gsea.R")
 source("scripts/11_cibersort_infiltration.R")
 ```
-
-
