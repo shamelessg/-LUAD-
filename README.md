@@ -1,10 +1,10 @@
-# TCGA-LUAD immune microenvironment analysis around BTK
+# TCGA-LUAD immune microenvironment analysis around BTK  -- artical reproduce project by wrc
 
 <p align="center">
   <img src="results/figures/fig8_comparison.png" width="900" alt="Figure 8 Comparison">
 </p>
 
-> **Figure 8 — CIBERSORT TIC Profile ： 原文 vs. 复现。** 左为 Bi et al. (2020) 原文 Figure 8，右为本仓库独立复现。A：LUAD 肿瘤样本中 21 种免疫浸润细胞的相对组成；B：免疫细胞间 Spearman 相关性热图。
+> **Figure 8 — CIBERSORT TIC Profile ： 原文 vs. 复现。
 >
 > *Original Figure 8 from Bi K-W, Wei X-G, Qin X-X, Li B. Front. Oncol. 2020;10:424. doi:10.3389/fonc.2020.00424*
 
@@ -12,9 +12,9 @@
 
 ## 从理论学习到生信实践：本科阶段基于 TCGA 的免疫微环境经典 pipeline 复现回顾整理
 
-此仓库整理本人于大三上学期复现一篇生信文章的过程。
-思路是"这一步为什么要做？输入的数据长什么样？输出的结果怎么看？如果报错了如何排查？"。
-希望以此展示我生信学习的过程与已学到的科学技能与思维。
+此仓库整理本人于大三上学期复现一篇生信文章的过程。  
+展示思路是："这一步为什么要做？输入的数据长什么样？输出的结果怎么看？如果报错了如何排查？"。  
+希望以此展示我生信学习的过程与已学到的科学技能与思维。  
 
 
 ## Pipeline Overview / 分析全流程拆解
@@ -41,16 +41,19 @@
 scripts/              # 按复现步骤拆开的 R 脚本
 data_description/     # 数据来源和大文件说明
 data/                 # 按照脚本流程整理的全部文件
-results/tables/       # 可以提交的小型结果表
+results/tables/       # 流程中生成的的小型结果表
 results/figures/      # 原始结果图和重绘结果图
 notes/                # 复现过程中的笔记与思考
-notes/github_update_plan  #分布整理并上传github的计划          
+notes/github_update_plan  #分布整理并上传github的计划
+session_info.txt      # 项目所使用的环境依赖          
 ```
 
 
 ## Data note
 
-TCGA 表达矩阵文件比较大，不适合直接上传GitHub。完整数据来源和需要准备的文件见：
+TCGA 表达矩阵文件比较大，流程文件臃肿，不适合上传GitHub。  
+因此只上传了表达矩阵以外的原始文件 与 占位流程文件夹。  
+完整数据来源和需要准备的文件见：
 
 - `data_description/data_source.md`
 - `data_description/large_files_note.md`
@@ -78,3 +81,22 @@ source("scripts/09_btk_expression_clinical.R")
 source("scripts/10_btk_deg_gsea.R")
 source("scripts/11_cibersort_infiltration.R")
 ```
+
+## Environment & Dependencies
+
+本项目所有分析均基于 **R 4.6.0 (2026-04-24)** 完成，运行平台为 **macOS Sequoia (aarch64-apple-darwin23)**。核心分析包及用途归类如下：
+
+| 类别 | 包 | 用途 |
+|:--|:--|:--|
+| 数据清洗与整合 | `tidyverse` | 全流程数据读写与变形 |
+| 差异分析 | `DESeq2` | ImmuneScore / StromalScore / BTK 分组差异 |
+| 生存分析 | `survival`, `survminer`, `forestplot` | COX 回归、K-M 曲线、森林图 |
+| 富集与互作网络 | `clusterProfiler`, `org.Hs.eg.db`, `enrichplot` | GO / KEGG / GSEA |
+| | `httr`, `jsonlite` | STRING API PPI 互作网络 |
+| 微环境反卷积 | `estimate` | ESTIMATE 免疫/基质评分 |
+| | `e1071`, `parallel`, `preprocessCore` | CIBERSORT 免疫浸润 |
+| 核心可视化 | `ggplot2`, `pheatmap`, `ggpubr` | 热图、箱线图、火山图 |
+| | `corrplot`, `ggcorrplot`, `ggsci`, `ggnewscale` | 相关性图、配色方案 |
+
+> **Reproducibility Note:**  
+> 为确保代码完全可复现，所有 22 个主包及底层依赖的确切版本号（含 Bioconductor）已导出至 [`docs/session_info.txt`](docs/session_info.txt)。使用 `Rscript -e "writeLines(capture.output(sessionInfo()), 'session_info.txt')"` 即可对环境进行逐包核对。
