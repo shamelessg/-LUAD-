@@ -1,5 +1,5 @@
 # 06_shared_deg_enrichment.R
-# 对 ImmuneScore 和 StromalScore 差异基因取交集（替代仙桃手动操作），
+# 对 ImmuneScore 和 StromalScore 差异基因取交集，
 # 然后对交集基因做 GO 和 KEGG 富集分析。
 
 suppressPackageStartupMessages({
@@ -56,7 +56,7 @@ cat(sprintf("ImmuneScore 上调: %d, 下调: %d\n",
 cat(sprintf("StromalScore 上调: %d, 下调: %d\n",
             length(stromal_degs$up), length(stromal_degs$down)))
 
-# ── 取交集（替代仙桃） ────────────────────────────────────────────────────────
+# ── 取交集 ────────────────────────────────────────────────────────────────────
 common_up   <- intersect(immune_degs$up, stromal_degs$up)
 common_down <- intersect(immune_degs$down, stromal_degs$down)
 
@@ -74,7 +74,7 @@ cat(sprintf("DEG_final 共 %d 个基因，已写入 %s\n",
             nrow(DEG_final), file.path(out_dir, "DEG_final.txt")))
 
 # ── 准备富集分析用的基因列表 ──────────────────────────────────────────────────
-# 使用 ImmuneScore DEG 的 log2FC（原始教案："导入immune或stromal差异分析结果 均可"）
+# 使用 ImmuneScore DEG 的 log2FC 为交集基因提供排序和方向信息
 immune_deg <- as.data.frame(immune_res)
 immune_deg <- immune_deg[rownames(immune_deg) %in% DEG_final$SYMBOL, , drop = FALSE]
 immune_deg$SYMBOL <- rownames(immune_deg)

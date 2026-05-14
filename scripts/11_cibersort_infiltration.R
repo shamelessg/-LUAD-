@@ -1,7 +1,7 @@
 # 11_cibersort_infiltration.R
 # CIBERSORT 免疫浸润分析：
 #   - 基于 22 种免疫细胞 signature (LM22) 反卷积量化免疫浸润
-#   - 堆叠柱状图（彩虹图）
+#   - 免疫细胞比例堆叠图
 #   - BTK 高低表达组免疫细胞差异比较
 #   - 免疫细胞相关性热图
 
@@ -41,7 +41,7 @@ library(preprocessCore)
 source(cibersort_r)
 res_cibersort <- CIBERSORT(lm22_file, tpms_file, perm = 100, QN = TRUE)
 
-# CIBERSORT.R 内部会把 CIBERSORT-Results.txt 写到工作目录，移到正确位置
+# CIBERSORT 默认会把 CIBERSORT-Results.txt 写到工作目录，这里统一移入步骤目录
 root_result <- file.path(project_dir, "CIBERSORT-Results.txt")
 if (file.exists(root_result)) {
   file.copy(root_result, file.path(out_dir, "CIBERSORT-Results.txt"), overwrite = TRUE)
@@ -57,7 +57,7 @@ write.table(ciber_res, file.path(out_dir, "ciber.res.txt"),
 write.table(ciber_res, file.path(table_dir, "CIBERSORT-Results.txt"),
             sep = "\t", row.names = TRUE, col.names = NA, quote = FALSE)
 
-# ── 1. 彩虹堆叠柱状图 ────────────────────────────────────────────────────────────
+# ── 1. 免疫细胞比例堆叠图 ───────────────────────────────────────────────────────
 mycol <- ggplot2::alpha(rainbow(ncol(ciber_res)), 0.7)
 
 pdf(file.path(figures_dir, "cibersort_barplot.pdf"), width = 20, height = 8)

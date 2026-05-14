@@ -19,10 +19,10 @@ gdc_file <- file.path(external_dir, "luad.gdc_2022.rda")
 annotation_file <- file.path(external_dir, "gene_annotation_2022.rda")
 
 if (!file.exists(gdc_file)) {
-  stop("Missing data/external/luad.gdc_2022.rda. Please prepare TCGA-LUAD GDC data first.")
+  stop("Missing data/external/01_tcga_expression_clinical/luad.gdc_2022.rda. Please prepare TCGA-LUAD GDC data first.")
 }
 if (!file.exists(annotation_file)) {
-  stop("Missing data/external/gene_annotation_2022.rda. Please prepare gene annotation first.")
+  stop("Missing data/external/01_tcga_expression_clinical/gene_annotation_2022.rda. Please prepare gene annotation first.")
 }
 
 load(gdc_file)

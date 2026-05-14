@@ -19,10 +19,10 @@ estimate_file <- file.path(table_dir, "ESTIMATE_result.txt")
 gdc_file <- file.path(external_dir, "luad.gdc_2022.rda")
 
 if (!file.exists(exp_file)) {
-  stop("Missing data/processed/tpms01A_log2.txt. Please run scripts/01_prepare_TCGA_data.R first.")
+  stop("Missing data/processed/00_counts_tpms/tpms01A_log2.txt. Please run scripts/01_prepare_TCGA_data.R first.")
 }
 if (!file.exists(os_file)) {
-  stop("Missing data/external/OS.txt. Please prepare survival data first.")
+  stop("Missing data/external/01_tcga_expression_clinical/OS.txt. Please prepare survival data first.")
 }
 if (!file.exists(estimate_file)) {
   stop("Missing results/tables/ESTIMATE_result.txt. Please run scripts/02_ESTIMATE_score.R first.")

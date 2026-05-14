@@ -17,7 +17,7 @@ estimate_raw_file   <- file.path(counts_tpms_dir, "tpms01A_log2_estimate_score.t
 estimate_result_file <- file.path(table_dir, "ESTIMATE_result.txt")
 
 if (!file.exists(exp_file)) {
-  stop("Missing data/processed/tpms01A_log2.txt. Please run scripts/01_prepare_TCGA_data.R first.")
+  stop("Missing data/processed/00_counts_tpms/tpms01A_log2.txt. Please run scripts/01_prepare_TCGA_data.R first.")
 }
 
 exp <- read.table(exp_file, sep = "\t", row.names = 1, check.names = FALSE,

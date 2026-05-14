@@ -99,4 +99,4 @@ source("scripts/11_cibersort_infiltration.R")
 | | `corrplot`, `ggcorrplot`, `ggsci`, `ggnewscale` | 相关性图、配色方案 |
 
 > **Reproducibility Note:**  
-> 为确保代码完全可复现，所有 22 个主包及底层依赖的确切版本号（含 Bioconductor）已导出至 [`docs/session_info.txt`](docs/session_info.txt)。使用 `Rscript -e "writeLines(capture.output(sessionInfo()), 'session_info.txt')"` 即可对环境进行逐包核对。
+> 具体包版本和平台信息记录在 [`session_info.txt`](session_info.txt)。

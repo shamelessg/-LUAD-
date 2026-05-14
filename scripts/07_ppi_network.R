@@ -1,6 +1,6 @@
 # 07_ppi_network.R
 # PPI 蛋白互作网络：通过 STRING REST API 获取 DEG_final 交集基因的蛋白互作网络。
-# 网络差时自动回退到保存基因列表，供 STRING 网页手动上传。
+# STRING API 不可用时保留基因列表，便于在网页端补充核查。
 
 suppressPackageStartupMessages({
   library(tidyverse)
