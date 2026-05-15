@@ -1,7 +1,7 @@
 # TCGA-LUAD immune microenvironment analysis around BTK  -- artical reproduce project by wrc
 
 <p align="center">
-  <img src="results/figures/fig8_comparison.png" width="900" alt="Figure 8 Comparison">
+  <img src="results/figures/comparison/fig8_comparison.png" width="900" alt="Figure 8 Comparison">
 </p>
 
 > **Figure 8 — CIBERSORT TIC Profile ： 原文 vs. 复现。
